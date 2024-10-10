@@ -17,11 +17,10 @@ export default function ShiftItem({ shift, onBookShift, onCancelShift }) {
   };
 
   const handleAction = async () => {
-    if (isHelsinki9to11()) return; 
+    if (isHelsinki9to11() && shift.booked) return; // Prevent action for booked Helsinki 9-11 shifts
 
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 2000)); 
-    
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
     if (shift.booked) {
       onCancelShift(shift.id);
     } else {
@@ -48,7 +47,7 @@ export default function ShiftItem({ shift, onBookShift, onCancelShift }) {
           onClick={handleAction}
           disabled={isHelsinki9to11() && shift.booked}
         >
-          {shift.booked || isHelsinki9to11() ? 'Cancel' : 'Book'}
+          {shift.booked ? 'Cancel' : 'Book'}
         </button>
       )}
     </div>

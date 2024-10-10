@@ -143,9 +143,3 @@ body {
   font-weight: bold;
   color: var(--color-primary);
 }
-
-
-.action-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
