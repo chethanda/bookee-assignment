@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./components/Header";
+import MyShifts from "./components/MyShifts";
+import AvailableShifts from "./components/AvailableShifts";
+import { mockShifts } from "./utils/mockData";
 
-function App() {
+export default function App() {
+  const [activeView, setActiveView] = useState("myShifts");
+  const [shifts, setShifts] = useState(mockShifts);
+
+  const handleBookShift = (shiftId) => {
+    setShifts(
+      shifts.map((shift) =>
+        shift.id === shiftId ? { ...shift, booked: true } : shift
+      )
+    );
+  };
+
+  const handleCancelShift = (shiftId) => {
+    setShifts(
+      shifts.map((shift) =>
+        shift.id === shiftId ? { ...shift, booked: false } : shift
+      )
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header activeView={activeView} setActiveView={setActiveView} />
+      {activeView === "myShifts" ? (
+        <MyShifts
+          shifts={shifts}
+          onCancelShift={handleCancelShift}
+          onBookShift={handleBookShift}
+        />
+      ) : (
+        <AvailableShifts
+          shifts={shifts}
+          onBookShift={handleBookShift}
+          onCancelShift={handleCancelShift}
+        />
+      )}
     </div>
   );
 }
-
-export default App;
