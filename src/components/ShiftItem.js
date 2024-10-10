@@ -21,13 +21,16 @@ export default function ShiftItem({ shift, onBookShift, onCancelShift }) {
 
     setIsLoading(true);
     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
-    if (shift.booked) {
+    if (shift.booked || isHelsinki9to11()) {
       onCancelShift(shift.id);
     } else {
       onBookShift(shift.id);
     }
     setIsLoading(false);
   };
+
+  const buttonText = shift.booked || isHelsinki9to11() ? 'Cancel' : 'Book';
+  const buttonClass = buttonText === 'Cancel' ? 'cancel' : 'book';
 
   return (
     <div className={`shift-item ${shift.booked ? 'booked' : ''}`}>
@@ -37,17 +40,17 @@ export default function ShiftItem({ shift, onBookShift, onCancelShift }) {
       </div>
       {isLoading ? (
         <img
-          src={shift.booked ? spinnerRed : spinnerGreen}
+          src={buttonText === 'Cancel' ? spinnerRed : spinnerGreen}
           alt="Loading"
           className="spinner"
         />
       ) : (
         <button
-          className={`action-button ${shift.booked ? 'cancel' : 'book'}`}
+          className={`action-button ${buttonClass}`}
           onClick={handleAction}
           disabled={isHelsinki9to11() && shift.booked}
         >
-          {shift.booked ? 'Cancel' : 'Book'}
+          {buttonText}
         </button>
       )}
     </div>
